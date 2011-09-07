@@ -5,10 +5,10 @@
  * Andrew Drane
  * Jonathan Hendler
  * 
- * Process Mustache templates into your CakePHP application.
- * Figures out sub-templates
+ * Process and render Mustache templates into your CakePHP application.
  * 
- * Requires the Mustache.php library - available from:
+ * Requires that the Mustache.php library is copied to your Vendor directory
+ * Available from:
  * https://github.com/bobthecow/mustache.php/
  * 
  * 
@@ -26,28 +26,31 @@
  * 
  */
 
-
 require_once ROOT . '/app/vendors/mustache/Mustache.php';
 
 class MustacheHelper extends AppHelper {
     var $ext = 'mustache'; //Extention for the templates. 'mustache' unless noted otherwise
-    var $partials = array(); //recursively load partials. Save as class variable so we don't need to double-load
+    var $partials = array(); //recursively loaded partials. Save as class variable so we don't need to double-load
    
 
-    /** Returns the rednered template as HTML. 
-     * All variables should be set to the view
+    /** Returns the rendered template as HTML. 
+     * All variables should be 'set' by the CakePHP Controller
      *
      * @param string $element - element location, no extention (e.g. 'users/course')
      * @return string - HTML from the Mustache template
      */
-    function element( $element ){
+    function element( $element ) {
         try {
-            //return $M->render('Hello {{planet}}', array('planet' => 'World!'));
+            // get the template text. Also recursively loads all partials
             $template = $this->_loadTemplate( $element );
         
+            // grab the Cake view with all variables
             $V = ClassRegistry::getObject('view');
+            
+            // Instantiate Mustache, with all data passed in.
             $M = new Mustache( $template, $V->viewVars, $this->partials );
 
+            //generate the HTML
             $result = $M->render();
             
         } catch ( Exception $e ) {
@@ -60,6 +63,7 @@ class MustacheHelper extends AppHelper {
     
     
     /** Get the path to an element file. Will have the extension provided above
+     * Ensures we are getting a .mustache file from the elements directory
      *
      * @param string $element - relative path from the elements folder
      * @return string - system path to the element for PHP fread functions
@@ -79,13 +83,13 @@ class MustacheHelper extends AppHelper {
         
         //fail nicely if we have a bad file
         if(!file_exists( $path ) ) {
-            debug("Bad template  called in mustache: $element<br />"); 
+            debug( "Bad template path: $element<br />" ); 
             return '';
         }
 
         //read the file contents
         $template_file = fopen( $path, 'r' );
-        $template = fread ( $template_file, filesize( $path ) );
+        $template = fread( $template_file, filesize( $path ) );
         
         //load any partials
         $this->_loadPartials( $template );
@@ -102,13 +106,13 @@ class MustacheHelper extends AppHelper {
         //Extract names of any partials from the template
         preg_match_all( '/\{\{[\s]*\>[\s]*(.*)[\s]*\}\}/', $template, $partials );
 
-        //iterate through the partials - add them to the partials list if they haven't been added before
-        foreach($partials[1] as $partial ) {
-            if( !isset( $this->partials[ $partial ]) ) {
+        // iterate through the partials
+        // adds the corresponding templates to the partials list while avoiding duplicates
+        // _loadTemplate will call _loadPartials to get the full list of templates
+        foreach ( $partials[1] as $partial ) {
+            if ( !isset( $this->partials[ $partial ]) ) {
                 $this->partials[ $partial ] = $this->_loadTemplate( $partial );
             }
         }
      }
-
-
 }
