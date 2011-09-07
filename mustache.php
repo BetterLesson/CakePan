@@ -6,7 +6,7 @@ class MustacheHelper extends AppHelper {
     var $path = '';
 
     function element( $element ){
-        //try{
+        try {
             $V = ClassRegistry::getObject('view');
             $M = new Mustache;
 
@@ -22,10 +22,10 @@ class MustacheHelper extends AppHelper {
        
             $result = $M->render( $template, $V->viewVars );
             
-//        } catch ( Exception $e ) {
-//            debug( $e );
-//            return false;
-//        }
+        } catch ( Exception $e ) {
+            debug( $e );
+            return false;
+        }
         
         return $result;
         
