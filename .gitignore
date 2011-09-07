@@ -1,3 +1,6 @@
+# Ignore the SVN stuff
 .svn
+
+# Ignore the other helpers. Only pay attention to mustache.php
 *.php
 !mustache.php
