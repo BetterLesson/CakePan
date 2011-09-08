@@ -1,13 +1,16 @@
 #CakePan 
 
-CakePan is a CakePHP view helper that renders Mustache templates.
+CakePan is a CakePHP view helper that renders Mustache templates. It will also load and process sub-templates!
 
-It will load and render sub-templates as well
+### Why use Mustache templates in CakePHP?
+<strong>Portability and scalability!</strong> If you have an app that uses lots of front-end coding, you only have to write your templates once. Mustache templates can be rendered in PHP, Javascript, Ruby, Scala, even C++! If you want to move to or from some other framework (Rails, Grails, Lithium etc.), you can be sure that your views and design won't have to be re-built.
+
+For scalability, when the time comes, you can use templates with a more powerful engine like Scala, or just send JSON from any source, and render with Javascript. 
 
 ## Use
 
 ### install
-First - make afolder called 'mustache' in your app/vendors folder. Add the Mustache PHP library to your app/vendor folder. from https://github.com/bobthecow/mustache.php/
+First - make afolder called 'mustache' in your vendors folder. Add the Mustache PHP library to your app/vendor folder. from https://github.com/bobthecow/mustache.php/
 
 Then, place this helper out into the app/views/helpers folder of your CakePHP project. 
 
