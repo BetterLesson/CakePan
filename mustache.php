@@ -37,9 +37,10 @@ class MustacheHelper extends AppHelper {
      * All variables should be 'set' by the CakePHP Controller
      *
      * @param string $element - element location, no extention (e.g. 'users/course')
+     * @param array $values - passed in values that are merged with the view variables. Associative array
      * @return string - HTML from the Mustache template
      */
-    function element( $element ) {
+    function element( $element, $values = array() ) {
         try {
             // get the template text. Also recursively loads all partials
             $template = $this->_loadTemplate( $element );
@@ -48,7 +49,7 @@ class MustacheHelper extends AppHelper {
             $V = ClassRegistry::getObject('view');
             
             // Instantiate Mustache, with all data passed in.
-            $M = new Mustache( $template, $V->viewVars, $this->partials );
+            $M = new Mustache( $template, am( $V->viewVars, $values), $this->partials );
 
             //generate the HTML
             $result = $M->render();

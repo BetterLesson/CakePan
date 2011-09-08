@@ -12,14 +12,15 @@ For scalability, when the time comes, you can use templates with a more powerful
 ### install
 First - make afolder called 'mustache' in your vendors folder. Add the Mustache PHP library to your app/vendor folder. from https://github.com/bobthecow/mustache.php/
 
-Then, place this helper out into the app/views/helpers folder of your CakePHP project. 
+Then, place this helper out into the views/helpers folder of your CakePHP project. 
 
 ### production
 Write your elements in mustache format with the extension ".mustache" rather than ".ctp"!
 
 The Mustache manual is here: http://mustache.github.com/
 
-In your view - render an element using $this->Mustache->render('element'); just like you would render a CakePHP element. Make sure all the variables you need are set in the controller.
+In your view - render an element using $this->Mustache->render('element', $params); just like you would render a CakePHP element. 
+All the variable set by the controller are available, and merged with values passed into $params.
 
 Sub-templates should follow the same naming convention. Mustache will pass the variables to the sub-template in the context that it's called. For example, a nested template for a blog post with comments might look like:
 
@@ -43,3 +44,6 @@ Sub-templates should follow the same naming convention. Mustache will pass the v
 &lt;/div&gt;
 </pre>
 In this example, the post/comment element is called within the context of one of the comments (which in this case belongs to a User)
+
+## Todo
+- Test suite
