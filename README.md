@@ -20,21 +20,23 @@ In your view - render an element using $this->Mustache->render('element'); just 
 
 Sub-templates should follow the same naming convention. Mustache will pass the variables to the sub-template in the context that it's called. For example, a nested template for a blog post with comments might look like:
 
-/views/elements/posts/post.mustache :
+<pre>
+<strong>/views/elements/posts/post.mustache :</strong>
 {{#Post}}
-  <h2>{{title}}</h2>
-  <div>
+  &lt;h2&gt;{{title}}&lt;/h2\&gt;
+  &lt;div&gt;
     {{text}}
-  </div>
+  &lt;/div&gt;
 {{/Post}}
 {{#Comment}}
-  {{>post/comment}}
+  {{&gt;post/comment}}
 {{/Comment}}
 
-/views/elements/posts/comment.mustache :
-<div>
-<h3>{{#User}}{{name}}{{/User}} said: </h3>
-<p>{{text}}</p>
-</div>
 
+<strong>/views/elements/posts/comment.mustache :</strong>
+&lt;div&gt;
+&lt;h3&gt;{{#User}}{{name}}{{/User}} said: &lt;/h3&gt;
+&lt;p&gt;{{text}}&lt;/p&gt;
+&lt;/div&gt;
+</pre>
 In this example, the post/comment element is called within the context of one of the comments (which in this case belongs to a User)
