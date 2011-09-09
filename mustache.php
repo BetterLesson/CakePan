@@ -14,8 +14,10 @@
  * 
  * A few conventions:
  * 
- * Element: the name of the element - like you would use in CakePHP. 
- *  For example users/name corresponds to app/views/elements/users/name.mustache
+ * Replace / in an element path with __ - taht way Javascript can deal with it.
+ * 
+ * Element: the name of the element - like you would use in CakePHP, but replace '/' with '__'
+ *  For example users__name corresponds to app/views/elements/users/name.mustache
  * 
  * Template: the text string from an element, which is read from the element file.
  *  This is what gets passed into Mustache for conversion to HTML
@@ -23,6 +25,8 @@
  * Partials: elements called within elements. To include an element call within
  *  your element, simply use the element convention in the proper context! 
  *  Mustache takes care of the Data context
+ * 
+ * 
  * 
  */
 
@@ -70,6 +74,7 @@ class MustacheHelper extends AppHelper {
      * @return string - system path to the element for PHP fread functions
      */
     private function _getElementPath( $element ) {
+        $element = str_replace('__', '/', $element);
         return ROOT . DS . 'app' . DS . 'views' . DS . 'elements' . DS . $element . '.' . $this->ext;
     }
        
