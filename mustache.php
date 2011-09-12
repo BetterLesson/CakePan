@@ -66,6 +66,33 @@ class MustacheHelper extends AppHelper {
         return $result;
     }
     
+    /** Return the JSON encoded template and sub-templates with an optional 
+     * callback. Used to put the templates directly into a script tag
+     *
+     * @param type $template
+     * @param type $callback
+     * @return type 
+     */
+    function getJSONPTemplates( $element, $callback = false ) {
+        $template = $this->_loadTemplate( $element );
+        $this->partials[ $element ] = $template; //make sure everything comes back
+        if( $callback ) {
+            return sprintf('%s(%s);', $callback, json_encode( $this->partials ) );
+        } else {
+            return json_encode( $this->partials );
+        }
+    }
+    
+    /** Get the text of a single template. Public wrapper for _loadtemplate. 
+     * Does NOT get sub templates
+     *
+     * @param type $element
+     * @return type 
+     */
+    function getSingleTemplate( $element ) {
+        return $this->_loadTemplate( $element, false );
+    }
+    
     
     /** Get the path to an element file. Will have the extension provided above
      * Ensures we are getting a .mustache file from the elements directory
@@ -84,7 +111,7 @@ class MustacheHelper extends AppHelper {
      * @param string - $element relative path from the elements folder
      * @return string - template string for rendering with Mustache
      */
-    private function _loadTemplate( $element ) {
+    private function _loadTemplate( $element, $load_sub_templates = true ) {
         $path = $this->_getElementPath( $element );
         
         //fail nicely if we have a bad file
@@ -98,7 +125,9 @@ class MustacheHelper extends AppHelper {
         $template = fread( $template_file, filesize( $path ) );
         
         //load any partials
-        $this->_loadPartials( $template );
+        if( $load_sub_templates ) {
+            $this->_loadPartials( $template );
+        }
         return $template;
     }
     
